@@ -1,2 +1,2 @@
-# FooCoding 
-FooCoding is fullstack web developer courses. This repository includes assignments.
+## FooCoding 
+FooCoding is a Fullstack Web Development course. This repository includes assignments for the FooCoding program.
