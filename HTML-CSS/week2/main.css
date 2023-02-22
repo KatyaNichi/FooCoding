@@ -1,0 +1,153 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+main {
+  padding-top: 1rem;
+}
+h1 {
+  text-align: center;
+  margin: 2rem auto;
+}
+h2,
+h3 {
+  text-align: center;
+  margin: 1rem auto;
+  padding-top: 1rem;
+}
+ul {
+  list-style-type: none;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+section {
+  width: 95%;
+  margin: 0 auto;
+  padding: 1rem;
+}
+section:first-of-type {
+  background-color: lavender;
+}
+
+#grid-floats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, auto);
+  grid-gap: 1rem;
+}
+li {
+  border: 0.1rem solid rgb(166, 152, 184);
+  border-radius: 5%;
+  padding: 1rem;
+}
+li:hover {
+  transform: scale(1.2);
+  transition-duration: 1s;
+  background-color: rgb(166, 152, 184);
+  animation: myAnim 2s ease 0s 1 normal forwards;
+}
+
+#grid-floats li:first-of-type {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  filter: drop-shadow(15px -17px 8px #81707a);
+}
+section:nth-of-type(2) {
+  background-color: rgb(234, 187, 187);
+}
+#grid-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+#grid-flex li {
+  flex: 1 4 21%;
+}
+
+#grid-flex li:first-of-type {
+  flex-basis: 42%;
+  filter: drop-shadow(15px -17px 8px #81707a);
+}
+/*Mobile-  a two column grid, with the exception that the first item spans the full width*/
+
+@media (max-width: 1199px) and (min-width: 768px) {
+  #grid-floats {
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 0.7rem;
+  }
+  #grid-floats li:first-of-type {
+    grid-column-start: 1;
+    grid-column-end: 4;
+  }
+  #grid-floats li:nth-of-type(2) {
+    grid-column-start: 4;
+    grid-column-end: 7;
+    filter: drop-shadow(15px -17px 8px #81707a);
+  }
+  #grid-floats li:nth-of-type(3n + 3) {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  #grid-floats li:nth-of-type(3n + 4) {
+    grid-column-start: 3;
+    grid-column-end: 5;
+  }
+  #grid-floats li:nth-of-type(3n + 5) {
+    grid-column-start: 5;
+    grid-column-end: 7;
+  }
+  #grid-flex li:nth-of-type(2) {
+    flex-basis: 42%;
+    filter: drop-shadow(15px -17px 8px #81707a);
+  }
+}
+@media (max-width: 767px) {
+  #grid-floats {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0.5rem;
+  }
+  #grid-floats li:first-of-type {
+    grid-column-start: span 2;
+  }
+
+  #grid-flex li {
+    flex-basis: 42%;
+  }
+  #grid-flex li:first-of-type {
+    flex-basis: 84%;
+  }
+}
+@keyframes myAnim {
+  0%,
+  100% {
+    transform: translateX(0%);
+    transform-origin: 50% 50%;
+  }
+
+  15% {
+    transform: translateX(-30px) rotate(-6deg);
+  }
+
+  30% {
+    transform: translateX(15px) rotate(6deg);
+  }
+
+  45% {
+    transform: translateX(-15px) rotate(-3.6deg);
+  }
+
+  60% {
+    transform: translateX(9px) rotate(2.4deg);
+  }
+
+  75% {
+    transform: translateX(-6px) rotate(-1.2deg);
+  }
+}
