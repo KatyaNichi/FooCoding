@@ -74,8 +74,6 @@ section:nth-of-type(2) {
 #grid-flex li:first-of-type {
   flex-basis: 42%;
   filter: drop-shadow(15px -17px 8px #81707a);
-}
-/*Mobile-  a two column grid, with the exception that the first item spans the full width*/
 
 @media (max-width: 1199px) and (min-width: 768px) {
   #grid-floats {
@@ -118,7 +116,8 @@ section:nth-of-type(2) {
   }
 
   #grid-flex li {
-    flex-basis: 42%;
+    flex-basis: 42%;    
+    max-width: 36%;
   }
   #grid-flex li:first-of-type {
     flex-basis: 84%;
