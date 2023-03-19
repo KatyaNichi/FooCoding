@@ -7,7 +7,7 @@ FooCoding is a Fullstack Web Development course. This repository includes assign
 3. Homework week 3 https://katyanichi.github.io/FooCoding/HTML-CSS/week03/ https://github.com/KatyaNichi/FooCoding/tree/main/HTML-CSS/week03
 
 ### JavaScript
-1. Homework week 1 https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript/week01  https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript/week01
-2. Homework week 2 https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript/week02  https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript/week02
+1. Homework week 1 https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript/week01  
+2. Homework week 2 https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript/week02  
 
  
