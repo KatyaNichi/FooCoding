@@ -8,6 +8,9 @@ FooCoding is a Fullstack Web Development course. This repository includes assign
 
 ### JavaScript
 1. Homework week 1 https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript/week01  
-2. Homework week 2 https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript/week02  
+2. Homework week 2 https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript/week02
+
+### JavaScript2
+1. Homework week 1 https://github.com/KatyaNichi/FooCoding/tree/main/JavaScript2/week01
 
  
