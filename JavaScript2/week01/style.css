@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: rgb(186, 236, 238);
+}
+ul {
+  padding: 4%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(5, 25rem);
+  gap: 5% 2%;
+  list-style-type: none;
+  margin-bottom: 25%;
+}
+li {
+  text-align: center;
+  margin-bottom: 5%;
+}
+li img {
+  width: auto;
+  height: 100%;
+}
+p {
+  margin-bottom: 3%;
+  line-height: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  ul {
+    grid-template-columns: 1fr;
+    gap: 3%;
+  }
+}
