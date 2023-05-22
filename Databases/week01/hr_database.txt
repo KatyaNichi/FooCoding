@@ -1,0 +1,71 @@
+mysql> CREATE DATABASE HR;
+Query OK, 1 row affected (0.02 sec)
+mysql> USE HR;
+Database changed
+mysql> CREATE TABLE employee (
+    -> id INT PRIMARY KEY,
+    -> name VARCHAR(100),
+    -> age INT,
+    -> department VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.22 sec)
+mysql> INSERT INTO employee(id, name, age, department) VALUES (0, 'John Doe', 30,'IT');
+Query OK, 1 row affected (0.19 sec)
+
+mysql> INSERT INTO employee (id, name, age, department) VALUES(1, 'John Doe', 30, 'IT'),
+(2, 'Jane Smith', 35, 'HR'),(3, 'Michael Johnson', 28, 'Sales'),
+(4, 'Emily Davis', 32, 'Marketing'),(5, 'David Brown', 42, 'IT'),
+(6, 'Sarah Johnson', 27, 'HR'),(7, 'Alex Thompson', 38, 'Sales'),
+(8, 'Jessica Miller', 31, 'Marketing'),(9, 'Daniel Wilson', 45, 'IT'),
+(10, 'Olivia Taylor', 29, 'HR');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> UPDATE employee
+    -> SET name='Anna Stolz', department = 'Finance'
+    -> WHERE id = 0;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM employee;
++----+-----------------+------+------------+
+| id | name            | age  | department |
++----+-----------------+------+------------+
+|  0 | Anna Stolz      |   30 | Finance    |
+|  1 | John Doe        |   30 | IT         |
+|  2 | Jane Smith      |   35 | HR         |
+|  3 | Michael Johnson |   28 | Sales      |
+|  4 | Emily Davis     |   32 | Marketing  |
+|  5 | David Brown     |   42 | IT         |
+|  6 | Sarah Johnson   |   27 | HR         |
+|  7 | Alex Thompson   |   38 | Sales      |
+|  8 | Jessica Miller  |   31 | Marketing  |
+|  9 | Daniel Wilson   |   45 | IT         |
+| 10 | Olivia Taylor   |   29 | HR         |
++----+-----------------+------+------------+
+11 rows in set (0.00 sec)
+
+mysql> CREATE TABLE locations (
+    ->   location_id INT PRIMARY KEY AUTO_INCREMENT,
+    ->   city VARCHAR(100),
+    ->   country VARCHAR(100),
+    ->   address VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.24 sec)
+
+mysql>
+mysql> INSERT INTO locations (city, country, address)
+    -> VALUES
+    ->   ('New York', 'United States', '123 Main St'),('Malmo', 'Sweden', 'Hyllie alle 24'),
+    ->   ('London', 'United Kingdom', '456 Oxford St'),('Tokyo', 'Japan', '321 Shibuya Street'),
+    -> ('Sydney', 'Australia', '987 George Street'),
+    -> ('Berlin', 'Germany', '654 Friedrichstrasse'),
+    -> ('Rome', 'Italy', '147 Via Appia'),
+    -> ('Toronto', 'Canada', '852 Yonge Street'),
+    -> ('Madrid', 'Spain', '369 Gran Vía'),
+    -> ('Moscow', 'Russia', '753 Tverskaya Street'),
+    -> ('Dubai', 'United Arab Emirates', '951 Sheikh Zayed Road'), ('Paris', 'France', '789 Rue de la Paix');
+Query OK, 12 rows affected (0.01 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+
