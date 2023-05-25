@@ -827,7 +827,7 @@ mysql> SELECT name
 239 rows in set (0.00 sec)
 
 
-SELECT city.name FROM city JOIN country ON city.countrycode=country.code WHERE country.name= 'Netherlands';
+mysql> SELECT city.name FROM city JOIN country ON city.countrycode=country.code WHERE country.name= 'Netherlands';
 +-------------------+
 | name              |
 +-------------------+
