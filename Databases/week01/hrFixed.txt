@@ -1,0 +1,87 @@
+mysql> CREATE DATABASE hr2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> USE hr2;
+Database changed
+
+mysql> CREATE TABLE locations (
+    ->   location_id INT PRIMARY KEY AUTO_INCREMENT,
+    ->   city VARCHAR(100),
+    ->   country VARCHAR(100),
+    ->   address VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE TABLE employee (
+    ->   id INT PRIMARY KEY AUTO_INCREMENT,
+    ->   name VARCHAR(100),
+    ->   age INT,
+    ->   department VARCHAR(50),
+    ->   location_id INT,
+    ->   FOREIGN KEY (location_id) REFERENCES locations(location_id)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> INSERT INTO locations (city, country, address) VALUES
+    -> ('Malmo', 'Sweden', 'Stora Nygatan 43'),
+    -> ('Malmo', 'Sweden', 'Hyllie alle 24'),
+    -> ('Malmo', 'Sweden', 'Davidshallstorg 5'),
+    -> ('Malmo', 'Sweden', 'Baltzarsgatan 24'),
+    -> ('Malmo', 'Sweden', 'Gustav Adolfs Torg 10'),
+    -> ('Malmo', 'Sweden', 'Sankt Gertrudsgatan 6'),
+    -> ('Malmo', 'Sweden', 'Engelbrektsgatan 7'),
+    -> ('Malmo', 'Sweden', 'Drottningtorget 10'),
+    -> ('Malmo', 'Sweden', 'Södra Förstadsgatan 9'),
+    -> ('Malmo', 'Sweden', 'Östra Rönneholmsvägen 1');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO employee (name, age, department, location_id) VALUES
+    -> ('John Doe', 30, 'IT', 1),
+    -> ('Jane Smith', 35, 'HR', 2),
+    -> ('Michael Johnson', 28, 'Sales', 3),
+    -> ('Emily Davis', 32, 'Marketing', 4),
+    -> ('David Brown', 42, 'IT', 5),
+    -> ('Sarah Johnson', 27, 'HR', 6),
+    -> ('Alex Thompson', 38, 'Sales', 7),
+    -> ('Jessica Miller', 31, 'Marketing', 8),
+    -> ('Daniel Wilson', 45, 'IT', 9),
+    -> ('Olivia Taylor', 29, 'HR', 10);
+Query OK, 10 rows affected (0.02 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> SHOW * FROM employee;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* FROM employee' at line 1
+mysql> SELECT * FROM employee;
++----+-----------------+------+------------+-------------+
+| id | name            | age  | department | location_id |
++----+-----------------+------+------------+-------------+
+| 21 | John Doe        |   30 | IT         |           1 |
+| 22 | Jane Smith      |   35 | HR         |           2 |
+| 23 | Michael Johnson |   28 | Sales      |           3 |
+| 24 | Emily Davis     |   32 | Marketing  |           4 |
+| 25 | David Brown     |   42 | IT         |           5 |
+| 26 | Sarah Johnson   |   27 | HR         |           6 |
+| 27 | Alex Thompson   |   38 | Sales      |           7 |
+| 28 | Jessica Miller  |   31 | Marketing  |           8 |
+| 29 | Daniel Wilson   |   45 | IT         |           9 |
+| 30 | Olivia Taylor   |   29 | HR         |          10 |
++----+-----------------+------+------------+-------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM locations;
++-------------+-------+---------+----------------------------+
+| location_id | city  | country | address                    |
++-------------+-------+---------+----------------------------+
+|           1 | Malmo | Sweden  | Stora Nygatan 43           |
+|           2 | Malmo | Sweden  | Hyllie alle 24             |
+|           3 | Malmo | Sweden  | Davidshallstorg 5          |
+|           4 | Malmo | Sweden  | Baltzarsgatan 24           |
+|           5 | Malmo | Sweden  | Gustav Adolfs Torg 10      |
+|           6 | Malmo | Sweden  | Sankt Gertrudsgatan 6      |
+|           7 | Malmo | Sweden  | Engelbrektsgatan 7         |
+|           8 | Malmo | Sweden  | Drottningtorget 10         |
+|           9 | Malmo | Sweden  | Södra Förstadsgatan 9      |
+|          10 | Malmo | Sweden  | Östra Rönneholmsvägen 1    |
++-------------+-------+---------+----------------------------+
+10 rows in set (0.00 sec)
