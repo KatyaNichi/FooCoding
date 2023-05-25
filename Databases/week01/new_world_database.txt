@@ -826,40 +826,41 @@ mysql> SELECT name
 +----------------------------------------------+
 239 rows in set (0.00 sec)
 
-mysql> select city.name, country.name from city inner join country on city.countrycode = country.code where country.name = 'Netherlands';
-+-------------------+-------------+
-| name              | name        |
-+-------------------+-------------+
-| Amsterdam         | Netherlands |
-| Rotterdam         | Netherlands |
-| Haag              | Netherlands |
-| Utrecht           | Netherlands |
-| Eindhoven         | Netherlands |
-| Tilburg           | Netherlands |
-| Groningen         | Netherlands |
-| Breda             | Netherlands |
-| Apeldoorn         | Netherlands |
-| Nijmegen          | Netherlands |
-| Enschede          | Netherlands |
-| Haarlem           | Netherlands |
-| Almere            | Netherlands |
-| Arnhem            | Netherlands |
-| Zaanstad          | Netherlands |
-| ´s-Hertogenbosch  | Netherlands |
-| Amersfoort        | Netherlands |
-| Maastricht        | Netherlands |
-| Dordrecht         | Netherlands |
-| Leiden            | Netherlands |
-| Haarlemmermeer    | Netherlands |
-| Zoetermeer        | Netherlands |
-| Emmen             | Netherlands |
-| Zwolle            | Netherlands |
-| Ede               | Netherlands |
-| Delft             | Netherlands |
-| Heerlen           | Netherlands |
-| Alkmaar           | Netherlands |
-+-------------------+-------------+
-28 rows in set (0.05 sec)
+
+SELECT city.name FROM city JOIN country ON city.countrycode=country.code WHERE country.name= 'Netherlands';
++-------------------+
+| name              |
++-------------------+
+| Amsterdam         |
+| Rotterdam         |
+| Haag              |
+| Utrecht           |
+| Eindhoven         |
+| Tilburg           |
+| Groningen         |
+| Breda             |
+| Apeldoorn         |
+| Nijmegen          |
+| Enschede          |
+| Haarlem           |
+| Almere            |
+| Arnhem            |
+| Zaanstad          |
+| ´s-Hertogenbosch  |
+| Amersfoort        |
+| Maastricht        |
+| Dordrecht         |
+| Leiden            |
+| Haarlemmermeer    |
+| Zoetermeer        |
+| Emmen             |
+| Zwolle            |
+| Ede               |
+| Delft             |
+| Heerlen           |
+| Alkmaar           |
++-------------------+
+28 rows in set (0.01 sec)
 
 mysql> SELECT population
     -> FROM city
