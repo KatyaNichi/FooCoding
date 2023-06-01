@@ -1,0 +1,50 @@
+
+mysql> DELIMITER //
+mysql>
+mysql> CREATE TRIGGER language_alert
+    -> AFTER INSERT ON CountryLanguage
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     DECLARE language_count INT;
+    ->     DECLARE message VARCHAR(255);
+    ->     SET language_count = (
+    ->         SELECT COUNT(*) FROM CountryLanguage WHERE CountryCode = NEW.CountryCode
+    ->     );
+    ->
+    ->     IF language_count >= 10 THEN
+    ->         SET message = 'Attention! You are trying to add a tenth language or more!';
+    ->         SET @lc_messages = message;
+    ->         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @lc_messages;
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.07 sec)
+mysql>
+mysql> DELIMITER ;
+
+mysql> SHOW TRIGGERS;
++----------------+--------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+------------------------+-----------------------------------------------------------------------------------------------------------------------+----------------+----------------------+----------------------+--------------------+
+| Trigger        | Event  | Table           | Statement                                                                                                                                                                                                                                                                                                                                                                                                                                | Timing | Created                | sql_mode                                                                                                              | Definer        | character_set_client | collation_connection | Database Collation |
++----------------+--------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+------------------------+-----------------------------------------------------------------------------------------------------------------------+----------------+----------------------+----------------------+--------------------+
+| language_alert | INSERT | countrylanguage | BEGIN
+    DECLARE language_count INT;
+    DECLARE message VARCHAR(255);
+    SET language_count = (
+        SELECT COUNT(*) FROM CountryLanguage WHERE CountryCode = NEW.CountryCode
+    );
+
+    IF language_count >= 10 THEN
+        SET message = 'Attention! This country already has 10 languages or more!';
+        SET @lc_messages = message;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @lc_messages;
+    END IF;
+END | AFTER  | 2023-05-31 14:11:58.65 | ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | root@localhost | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++----------------+--------+-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+------------------------+-----------------------------------------------------------------------------------------------------------------------+----------------+----------------------+----------------------+--------------------+
+1 row in set (0.01 sec)
+
+mysql> INSERT INTO CountryLanguage (CountryCode, Language)
+    -> VALUES ('USA', 'Georgian');
+ERROR 1644 (45000): Attention! This country already has 10 languages or more!
+
+mysql> INSERT INTO CountryLanguage (CountryCode, Language)
+    -> VALUES ('NLD', 'Russian');
+Query OK, 1 row affected (0.01 sec)

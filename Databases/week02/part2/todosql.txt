@@ -1,0 +1,59 @@
+mysql> CREATE DATABASE todo_list;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> USE todo_list;
+Database changed
+mysql> CREATE TABLE `user` (
+    ->   `userID` INT NOT NULL,
+    ->   `firstName` VARCHAR(255) DEFAULT NULL,
+    ->   `lastName` VARCHAR(255) DEFAULT NULL,
+    ->   `email` VARCHAR(255) DEFAULT NULL,
+    ->   `password` VARCHAR(255) DEFAULT NULL,
+    ->   PRIMARY KEY (`userID`)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> CREATE TABLE `todolist` (
+    ->   `listID` INT PRIMARY KEY,
+    ->   `userID` INT,
+    ->   `listName` VARCHAR(255),
+    ->   FOREIGN KEY (`userID`) REFERENCES `user` (`userID`)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> CREATE TABLE `ToDoItem` (
+    ->   `itemID` INT PRIMARY KEY,
+    ->   `itemName` VARCHAR(255),
+    ->   `isCompleted` BOOLEAN,
+    ->   `reminder` DATETIME,
+    ->   `listID` INT,
+    ->   FOREIGN KEY (`listID`) REFERENCES `todolist` (`listID`)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> CREATE TABLE `tag` (
+    ->   `tagID` INT PRIMARY KEY,
+    ->   `tagNAME` VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> CREATE TABLE `Tag-Item` (
+    ->   `itemID` INT,
+    ->   `tagID` INT,
+    ->   FOREIGN KEY (`itemID`) REFERENCES `ToDoItem` (`itemID`),
+    ->   FOREIGN KEY (`tagID`) REFERENCES `tag` (`tagID`)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_todo_list |
++---------------------+
+| tag                 |
+| tag-item            |
+| todoitem            |
+| todolist            |
+| user                |
++---------------------+
+5 rows in set (0.01 sec)
+
