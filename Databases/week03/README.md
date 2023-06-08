@@ -12,9 +12,10 @@ Postman (for testing the APIs)
 
 1. Clone the repository from GitHub
 2. Navigate to the project directory
-3. Install the required dependencies:
+3. Configure the MySQL connection
+4. Install the required dependencies:
    npm install
-4. Start the server:
+5. Start the server:
    npm start
 
 The server will start running on http://localhost:4000
@@ -55,7 +56,7 @@ Example request body: {
 4. Delete a ToDo list
    Endpoint: DELETE /delete
 
-Example request URL: http://localhost:3000/api/todo/delete-list
+Example request URL: http://localhost:4000/delete
 
 Example request body: {
 "listId": 9
