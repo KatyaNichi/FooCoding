@@ -69,6 +69,7 @@ Example request URL: http://localhost:4000/update/item
 
 Example request body: {
 "isCompleted": true,
+"itemName": "Ice cream",
 "itemID": 5
 }
 
