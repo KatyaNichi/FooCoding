@@ -21,7 +21,7 @@ connection.connect((err) => {
 
 //display all users
 app.get("/", (req, res) => {
-  const sql = "SELECT firstname, lastName, userId FROM user";
+  const sql = "SELECT firstname, lastName, email, userId FROM user";
   connection.query(sql, (err, result) => {
     if (err) {
       res.status(500).json({
@@ -69,11 +69,11 @@ app.get("/items", (req, res) => {
   });
 });
 
-// create todo item
-app.post("/:listId/create-item", (req, res) => {
+/// create todo item
+app.post("/create-item", (req, res) => {
   const itemName = req.body.itemName;
   const isCompleted = req.body.isCompleted;
-  const listId = req.params.listId;
+  const listId = req.body.listId; // Get listId from the request body
 
   if (typeof isCompleted !== "boolean") {
     console.error("Wrong type of input");
@@ -82,7 +82,9 @@ app.post("/:listId/create-item", (req, res) => {
   }
 
   const sql = `INSERT INTO todoitem(itemName, isCompleted, listId) VALUES (?, ?, ?)`;
-  connection.query(sql, [itemName, isCompleted, listId], (err, _result) => {
+  const values = [itemName, isCompleted, listId];
+
+  connection.execute(sql, values, (err, _result) => {
     if (err) {
       res.status(500).json({
         status: "Error",
@@ -90,10 +92,11 @@ app.post("/:listId/create-item", (req, res) => {
       });
       console.log(err);
     } else {
+      let completionStatus = isCompleted ? "completed" : "not completed";
+      const message = `An item '${itemName}' was added to the list with ID ${listId} and it is ${completionStatus}.`;
+
       res.status(200).json({
-        itemName: itemName,
-        isCompleted: isCompleted,
-        listId: listId,
+        message: message,
       });
       return;
     }
@@ -101,64 +104,63 @@ app.post("/:listId/create-item", (req, res) => {
 });
 
 // delete todo item
-app.delete("/delete/item", (req, res) => {
-  const itemID = req.body.itemID;
+app.delete("/delete/item/:itemID", (req, res) => {
+  const itemID = req.params.itemID;
 
-  connection.query(
-    "DELETE FROM todoitem WHERE itemID = ?",
-    itemID,
-    (err, result) => {
-      if (err) {
-        res.status(500).json({
-          status: "!OK",
-          message: "Something went wrong",
-        });
-        console.log(err);
-      } else {
-        res.status(200).send();
-        console.log("Deleted item with id: ", itemID);
-        return;
-      }
-    }
-  );
-});
+  const sql = "DELETE FROM todoitem WHERE itemID = ?";
+  const values = [itemID];
 
-//create a new todo list for a specific user
-app.post("/:userId/create", (req, res) => {
-  const listName = req.body.listName;
-  const reminder = req.body.reminder;
-  const userId = req.params.userId;
-
-  const sql = `INSERT INTO todolist (listName, userID, reminder) VALUES (?, ?, ?)`;
-  connection.query(sql, [listName, userId, reminder], (err, result) => {
+  connection.execute(sql, values, (err, result) => {
     if (err) {
-      console.error(err);
-      res.status(500).send();
-    } else {
-      const insertedId = result.insertId;
-      res.status(200).json({
-        listId: insertedId,
-        listName: listName,
-        userId: userId,
-        reminder: reminder,
+      res.status(500).json({
+        status: "!OK",
+        message: "Something went wrong",
       });
-      console.log("Created todo");
+      console.log(err);
+    } else {
+      res.status(200).json({
+        message: `Deleted item with id: ${itemID}`,
+      });
+      return;
     }
   });
 });
 
-// delete todolist
-app.delete("/delete", (req, res) => {
-  const listId = req.body.listId;
+/// create a new todo list
+app.post("/create-list", (req, res) => {
+  const listName = req.body.listName;
+  const reminder = req.body.reminder;
+  const userId = req.body.userId;
+
+  const sql = `INSERT INTO todolist (listName, userID, reminder) VALUES (?, ?, ?)`;
+  const values = [listName, userId, reminder || null];
+
+  connection.execute(sql, values, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({
+        message: "Something went wrong",
+      });
+    } else {
+      let message = `List '${listName}' was successfully created for user with ID '${userId}'`;
+      if (reminder) {
+        message += ` with a reminder of "${reminder}"`;
+      }
+      res.status(200).send(message);
+    }
+  });
+});
+
+///delete list
+app.delete("/delete/:listId", (req, res) => {
+  const listId = req.params.listId;
 
   connection.query(
     "DELETE FROM todoitem WHERE listId = ?",
     [listId],
     (err, result) => {
       if (err) {
-        res.status(500).json({
-          message: "Something went wrong",
-        });
+        res.status(500).send("Something went wrong");
         console.log(err);
       } else {
         connection.query(
@@ -166,16 +168,10 @@ app.delete("/delete", (req, res) => {
           [listId],
           (err, result) => {
             if (err) {
-              res.status(500).json({
-                message: "Something went wrong",
-              });
+              res.status(500).send("Something went wrong");
               console.log(err);
             } else {
-              res.status(200).send();
-              console.log(
-                "List and associated items are deleted: listId",
-                listId
-              );
+              res.status(200).send(`List with ID ${listId} is deleted`);
               return;
             }
           }
@@ -191,23 +187,25 @@ app.put("/update/item", (req, res) => {
   const isCompleted = req.body.isCompleted;
   const itemName = req.body.itemName;
 
-  let sql = "UPDATE todoitem SET";
+  let sql = "UPDATE todoitem SET ";
   const values = [];
 
   if (isCompleted !== undefined) {
-    sql += " isCompleted = ?";
+    sql += "isCompleted = ?, ";
     values.push(isCompleted);
   }
 
   if (itemName !== undefined) {
-    sql += " itemName = ?";
+    sql += "itemName = ?, ";
     values.push(itemName);
   }
+
+  sql = sql.slice(0, -2);
 
   sql += " WHERE itemID = ?";
   values.push(itemID);
 
-  connection.query(sql, values, (err, result) => {
+  connection.execute(sql, values, (err, result) => {
     if (err) {
       res.status(500).json({
         status: "!OK",
@@ -215,41 +213,63 @@ app.put("/update/item", (req, res) => {
       });
       console.log(err);
     } else {
-      res.status(200).json({
-        isCompleted,
-        itemName,
-        itemID,
-      });
-      console.log("Item updated with ID:", itemID);
+      res.status(200).send(`Item with ID ${itemID} has been updated.`);
       return;
     }
   });
 });
 
-// Add reminder to list
-app.put("/add-reminder-to-list", (req, res) => {
+//set or change reminder
+app.put("/add/reminder-to-list", (req, res) => {
   const listId = req.body.listId;
   const reminder = req.body.reminder;
 
-  connection.query(
-    "UPDATE todolist SET reminder = ? WHERE listId = ?",
-    [reminder, listId],
-    (err, result) => {
-      if (err) {
+  const selectSql = "SELECT reminder FROM todolist WHERE listId = ?";
+  const selectValues = [listId];
+
+  connection.execute(selectSql, selectValues, (selectErr, selectResult) => {
+    if (selectErr) {
+      res.status(500).json({
+        status: "!OK",
+        message: "Something went wrong",
+      });
+      console.log(selectErr);
+      return;
+    }
+
+    if (selectResult.length === 0) {
+      res.status(404).json({
+        status: "!OK",
+        message: "List not found",
+      });
+      return;
+    }
+
+    const existingReminder = selectResult[0].reminder;
+    const updateSql = "UPDATE todolist SET reminder = ? WHERE listId = ?";
+    const updateValues = [reminder, listId];
+
+    connection.execute(updateSql, updateValues, (updateErr, updateResult) => {
+      if (updateErr) {
         res.status(500).json({
           status: "!OK",
           message: "Something went wrong",
         });
-        console.log(err);
-      } else {
-        res.status(200).json({
-          listId,
-          reminder,
-        });
-        console.log("Reminder added to list with ID:", listId);
+        console.log(updateErr);
+        return;
       }
-    }
-  );
+
+      if (existingReminder) {
+        res
+          .status(200)
+          .send(
+            `Reminder updated to "${reminder}" for list with ID: ${listId}`
+          );
+      } else {
+        res.status(200).send(`Reminder added to list with ID: ${listId}`);
+      }
+    });
+  });
 });
 
 ///////////////////////////////// MORE FEATURES /////////////////////////////
@@ -261,73 +281,53 @@ app.post("/users", (req, res) => {
   const lastName = req.body.lastName || null;
 
   if (!email || !password) {
-    res.status(400).json({
-      message: "Email and password are required fields.",
-    });
+    res.status(400).send("Email and password are required fields.");
     return;
   }
-  connection.query(
-    "INSERT INTO user (email, password, firstName, lastName) VALUES (?, ?, ?, ?)",
-    [email, password, firstName, lastName],
-    (err, result) => {
-      if (err) {
-        res.status(500).json({
-          message: "Something went wrong",
-        });
-        console.log(err);
-        return;
-      }
 
-      res.status(200).json({
-        message: "User added successfully.",
-        user_id: result.insertId,
-      });
+  const sql =
+    "INSERT INTO user (email, password, firstName, lastName) VALUES (?, ?, ?, ?)";
+  const values = [email, password, firstName, lastName];
+
+  connection.execute(sql, values, (err, result) => {
+    if (err) {
+      res.status(500).send("Something went wrong");
+      console.log(err);
+      return;
     }
-  );
+
+    res.status(200).send("User added successfully.");
+  });
 });
 
 // Add a tag to list
-
 app.post("/add/tag", (req, res) => {
   const listID = req.body.listID;
   const tagName = req.body.tagName;
 
-  connection.query(
+  connection.execute(
     "INSERT INTO tag (tagName) VALUES (?)",
     [tagName],
-    (err, result) => {
+    (err, tagResult) => {
       if (err) {
-        res.status(500).json({
-          status: "!OK",
-          message: "Something went wrong",
-        });
-        console.log(err);
-      } else {
-        const tagID = result.insertId;
-
-        connection.query(
-          "INSERT INTO taglist (listID, tagID) VALUES (?, ?)",
-          [listID, tagID],
-          (err, result) => {
-            if (err) {
-              res.status(500).json({
-                status: "!OK",
-                message: "Something went wrong",
-              });
-              console.log(err);
-            } else {
-              res.status(200).json({
-                status: "OK",
-                message: "Tag added to list",
-                listID: listID,
-                tagID: tagID,
-              });
-              console.log("Tag added to list with ID:", listID);
-              return;
-            }
-          }
-        );
+        res.status(500).send("Something went wrong");
+        return;
       }
+
+      const tagID = tagResult.insertId;
+
+      connection.execute(
+        "INSERT INTO taglist (listID, tagID) VALUES (?, ?)",
+        [listID, tagID],
+        (err, result) => {
+          if (err) {
+            res.status(500).send("Something went wrong");
+            return;
+          }
+
+          res.status(200).send("Tag added to list");
+        }
+      );
     }
   );
 });
