@@ -12,10 +12,9 @@ Postman (for testing the APIs)
 
 1. Clone the repository from GitHub
 2. Navigate to the project directory
-3. Configure the MySQL connection
-4. Install the required dependencies:
+3. Install the required dependencies:
    npm install
-5. Start the server:
+4. Start the server:
    npm start
 
 The server will start running on http://localhost:4000
@@ -23,44 +22,36 @@ The server will start running on http://localhost:4000
 ## API Endpoints
 
 1. Insert item(s) in ToDo list
-   Endpoint: POST /listId/create-item
+   Endpoint: POST /create-item
 
-Example request URL: http://localhost:4000/6/create-item
+Example request URL: http://localhost:4000/create-item
 
 Example request body: {
 "itemName": "Soup",
-"isCompleted": false
+"isCompleted": false,
+"listId": 2
 }
 
 2. Delete item(s) in ToDo list
-   Endpoint: DELETE /delete/item
+   Endpoint: DELETE /delete/item/:itemID
 
-Example request URL: http://localhost:4000/delete/item
-
-Example request body:
-
-{
-"itemID": 3
-}
+Example request URL: http://localhost:4000/delete/item/7
 
 3. Create a new ToDo list
-   Endpoint: POST /:userId/create
+   Endpoint: POST /create-list
 
-Example request URL: http://localhost:4000/2/create
+Example request URL: http://localhost:4000/create-list
 
 Example request body: {
 "listName": "Reading",
-"reminder": "2076-01-12"
+"reminder": "2076-01-12",
+"userId": 5
 }
 
 4. Delete a ToDo list
-   Endpoint: DELETE /delete
+   Endpoint: DELETE /delete/:listId
 
-Example request URL: http://localhost:4000/delete
-
-Example request body: {
-"listId": 9
-}
+Example request URL: http://localhost:4000/delete/11
 
 5. Mark an item as completed and/or change name of a todo item.
    Endpoint: PUT /update/item
@@ -69,14 +60,14 @@ Example request URL: http://localhost:4000/update/item
 
 Example request body: {
 "isCompleted": true,
-"itemName": "Ice cream",
-"itemID": 5
+"itemID": 5,
+"itemName":"Buy bread"
 }
 
-6. Add a reminder for the list
-   Endpoint: PUT /add-reminder-to-list
+6. Add or update the reminder to the list
+   Endpoint: PUT /add/reminder-to-list
 
-Example request URL: http://localhost:4000/add-reminder-to-list
+Example request URL: http://localhost:4000/add/reminder-to-list
 
 Example request body: {
 "listId": 6,
