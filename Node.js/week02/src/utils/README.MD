@@ -33,7 +33,7 @@ node cli_handler.js --resource users --method GET --all
 
 ### To work with posts and make a GET request to retrieve a post by ID:
 
-### node cli_handler.js --resource posts --method GET --id 5
+node cli_handler.js --resource posts --method GET --id 5
 
 ### To work with users and create a new user using a POST request:
 
